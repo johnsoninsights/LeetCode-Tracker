@@ -1,7 +1,8 @@
 'use client';
 
 import type { Problem } from '@/types';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { TrendingUp, Target, Award, Clock } from 'lucide-react';
 
 interface StatsDisplayProps {
   problems: Problem[];
@@ -44,83 +45,148 @@ export default function StatsDisplay({ problems }: StatsDisplayProps) {
   const solvedCount = statusCounts['Solved with Help'] + statusCounts['Solved Independently'];
   const solvedPercentage = totalProblems > 0 ? ((solvedCount / totalProblems) * 100).toFixed(1) : 0;
 
+  // Custom label component that's more compact
+  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
+    const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill="white" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        className="text-xs font-bold"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
   if (totalProblems === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6 border-2 border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Progress</h2>
-        <p className="text-gray-700 dark:text-gray-300 text-lg">Add some problems to see your stats!</p>
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl mb-6 border border-gray-200/50 dark:border-gray-700/50">
+        <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+          Your Progress
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 text-lg">Add some problems to see your stats!</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6 border-2 border-gray-200 dark:border-gray-700">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Progress</h2>
+    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl mb-6 border border-gray-200/50 dark:border-gray-700/50">
+      <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+        Your Progress
+      </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg border-2 border-blue-200 dark:border-blue-700">
-          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Total Problems</p>
-          <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{totalProblems}</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="group bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <div className="flex items-center justify-between mb-2">
+            <Target className="w-6 h-6 text-white/80" />
+          </div>
+          <p className="text-sm text-white/80 font-medium">Total Problems</p>
+          <p className="text-3xl font-bold text-white">{totalProblems}</p>
         </div>
-        <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg border-2 border-green-200 dark:border-green-700">
-          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Solved</p>
-          <p className="text-2xl font-bold text-green-700 dark:text-green-300">{solvedCount}</p>
+
+        <div className="group bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <div className="flex items-center justify-between mb-2">
+            <Award className="w-6 h-6 text-white/80" />
+          </div>
+          <p className="text-sm text-white/80 font-medium">Solved</p>
+          <p className="text-3xl font-bold text-white">{solvedCount}</p>
         </div>
-        <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg border-2 border-purple-200 dark:border-purple-700">
-          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Success Rate</p>
-          <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{solvedPercentage}%</p>
+
+        <div className="group bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <div className="flex items-center justify-between mb-2">
+            <TrendingUp className="w-6 h-6 text-white/80" />
+          </div>
+          <p className="text-sm text-white/80 font-medium">Success Rate</p>
+          <p className="text-3xl font-bold text-white">{solvedPercentage}%</p>
         </div>
-        <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg border-2 border-yellow-200 dark:border-yellow-700">
-          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">In Progress</p>
-          <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{statusCounts['Attempted']}</p>
+
+        <div className="group bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <div className="flex items-center justify-between mb-2">
+            <Clock className="w-6 h-6 text-white/80" />
+          </div>
+          <p className="text-sm text-white/80 font-medium">In Progress</p>
+          <p className="text-3xl font-bold text-white">{statusCounts['Attempted']}</p>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <h3 className="text-lg font-bold mb-3 text-center text-gray-900 dark:text-gray-100">Status Breakdown</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={statusData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="bg-gray-50/50 dark:bg-gray-900/50 p-6 rounded-xl">
+          <h3 className="text-lg font-bold mb-4 text-center text-gray-900 dark:text-gray-100">Status Breakdown</h3>
+          <div className="flex flex-col items-center">
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={statusData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomLabel}
+                  outerRadius={70}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {statusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="mt-4 space-y-2 w-full">
+              {statusData.map((entry, index) => (
+                <div key={index} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></div>
+                    <span className="text-gray-700 dark:text-gray-300">{entry.name}</span>
+                  </div>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">{entry.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h3 className="text-lg font-bold mb-3 text-center text-gray-900 dark:text-gray-100">Difficulty Breakdown</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={difficultyData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {difficultyData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="bg-gray-50/50 dark:bg-gray-900/50 p-6 rounded-xl">
+          <h3 className="text-lg font-bold mb-4 text-center text-gray-900 dark:text-gray-100">Difficulty Breakdown</h3>
+          <div className="flex flex-col items-center">
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={difficultyData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomLabel}
+                  outerRadius={70}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {difficultyData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="mt-4 space-y-2 w-full">
+              {difficultyData.map((entry, index) => (
+                <div key={index} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></div>
+                    <span className="text-gray-700 dark:text-gray-300">{entry.name}</span>
+                  </div>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">{entry.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

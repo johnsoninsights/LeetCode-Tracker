@@ -31,6 +31,12 @@ const problemsSlice = createSlice({
         problem.lastAttemptedAt = new Date();
       }
     },
+    updateProblemNotes: (state, action: PayloadAction<{ id: string; notes: string }>) => {
+      const problem = state.problems.find(p => p.id === action.payload.id);
+      if (problem) {
+        problem.notes = action.payload.notes;
+      }
+    },
     removeProblem: (state, action: PayloadAction<string>) => {
       state.problems = state.problems.filter(p => p.id !== action.payload);
     },
@@ -48,6 +54,7 @@ export const {
   setProblems,
   addProblem,
   updateProblemStatus,
+  updateProblemNotes,
   removeProblem,
   setLoading,
   setError,

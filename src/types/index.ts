@@ -28,21 +28,15 @@ export interface Problem {
   title: string;
   difficulty: Difficulty;
   tags: AlgorithmTag[];
-  leetcodeNumber?: number; // Optional: actual LeetCode problem number
-  url?: string; // Link to the problem
+  leetcodeNumber?: number;
+  url?: string;
   status: Status;
   createdAt: Date;
   lastAttemptedAt?: Date;
+  notes?: string; 
 }
 
-export interface Attempt {
-  id: string;
-  problemId: string;
-  attemptDate: Date;
-  timeSpentMinutes: number;
-  solved: boolean;
-  neededHints: boolean;
-  confidenceLevel: 1 | 2 | 3 | 4 | 5; // 1 = not confident, 5 = very confident
-  notes?: string;
-  solutionCode?: string;
+export interface ActivityDay {
+  date: string; 
+  count: number; 
 }

@@ -4,11 +4,10 @@ import type { Problem, Status } from '@/types';
 
 const PROBLEMS_COLLECTION = 'problems';
 
-// Add a new problem to Firestore (with userId)
 export const addProblem = async (problem: Problem, userId: string) => {
   try {
     const problemData: any = {
-      userId, // Add userId to associate with the user
+      userId,
       title: problem.title,
       difficulty: problem.difficulty,
       tags: problem.tags,
@@ -25,6 +24,9 @@ export const addProblem = async (problem: Problem, userId: string) => {
     if (problem.lastAttemptedAt) {
       problemData.lastAttemptedAt = problem.lastAttemptedAt.toISOString();
     }
+    if (problem.notes) {
+      problemData.notes = problem.notes;
+    }
 
     const docRef = await addDoc(collection(db, PROBLEMS_COLLECTION), problemData);
     return docRef.id;
@@ -34,7 +36,6 @@ export const addProblem = async (problem: Problem, userId: string) => {
   }
 };
 
-// Get all problems for a specific user
 export const getProblems = async (userId: string): Promise<Problem[]> => {
   try {
     const q = query(
@@ -56,6 +57,7 @@ export const getProblems = async (userId: string): Promise<Problem[]> => {
         status: data.status,
         createdAt: new Date(data.createdAt),
         lastAttemptedAt: data.lastAttemptedAt ? new Date(data.lastAttemptedAt) : undefined,
+        notes: data.notes,
       });
     });
     
@@ -66,7 +68,6 @@ export const getProblems = async (userId: string): Promise<Problem[]> => {
   }
 };
 
-// Update problem status
 export const updateProblemStatus = async (problemId: string, newStatus: Status) => {
   try {
     const problemRef = doc(db, PROBLEMS_COLLECTION, problemId);
@@ -80,7 +81,18 @@ export const updateProblemStatus = async (problemId: string, newStatus: Status) 
   }
 };
 
-// Delete a problem
+export const updateProblemNotes = async (problemId: string, notes: string) => {
+  try {
+    const problemRef = doc(db, PROBLEMS_COLLECTION, problemId);
+    await updateDoc(problemRef, {
+      notes,
+    });
+  } catch (error) {
+    console.error('Error updating problem notes:', error);
+    throw error;
+  }
+};
+
 export const deleteProblem = async (problemId: string) => {
   try {
     await deleteDoc(doc(db, PROBLEMS_COLLECTION, problemId));
