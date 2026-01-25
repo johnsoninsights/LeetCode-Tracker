@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react';
 import ProblemForm from '@/components/ProblemForm';
 import ProblemList from '@/components/ProblemList';
-import type { Problem, Status } from '@/types';
+import ProblemFilters from '@/components/ProblemFilters';
+import type { Problem, Status, Difficulty } from '@/types';
 import { addProblem, getProblems, updateProblemStatus, deleteProblem } from '@/lib/firebaseHelpers';
 
 export default function Home() {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | 'All'>('All');
+  const [selectedStatus, setSelectedStatus] = useState<Status | 'All'>('All');
 
- 
   useEffect(() => {
     const fetchProblems = async () => {
       try {
@@ -29,7 +31,6 @@ export default function Home() {
   const handleAddProblem = async (newProblem: Problem) => {
     try {
       const docId = await addProblem(newProblem);
-     
       setProblems([...problems, { ...newProblem, id: docId }]);
     } catch (error) {
       console.error('Failed to add problem:', error);
@@ -40,7 +41,6 @@ export default function Home() {
   const handleUpdateStatus = async (problemId: string, newStatus: Status) => {
     try {
       await updateProblemStatus(problemId, newStatus);
-     
       setProblems(problems.map(problem => 
         problem.id === problemId 
           ? { ...problem, status: newStatus, lastAttemptedAt: new Date() }
@@ -55,13 +55,19 @@ export default function Home() {
   const handleDeleteProblem = async (problemId: string) => {
     try {
       await deleteProblem(problemId);
-     
       setProblems(problems.filter(problem => problem.id !== problemId));
     } catch (error) {
       console.error('Failed to delete problem:', error);
       alert('Failed to delete problem. Please try again.');
     }
   };
+
+  // Filter problems based on selected filters
+  const filteredProblems = problems.filter(problem => {
+    const matchesDifficulty = selectedDifficulty === 'All' || problem.difficulty === selectedDifficulty;
+    const matchesStatus = selectedStatus === 'All' || problem.status === selectedStatus;
+    return matchesDifficulty && matchesStatus;
+  });
 
   if (loading) {
     return (
@@ -84,8 +90,15 @@ export default function Home() {
           <ProblemForm onAddProblem={handleAddProblem} />
         </div>
 
+        <ProblemFilters
+          selectedDifficulty={selectedDifficulty}
+          selectedStatus={selectedStatus}
+          onDifficultyChange={setSelectedDifficulty}
+          onStatusChange={setSelectedStatus}
+        />
+
         <ProblemList 
-          problems={problems} 
+          problems={filteredProblems} 
           onUpdateStatus={handleUpdateStatus}
           onDeleteProblem={handleDeleteProblem}
         />
