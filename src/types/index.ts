@@ -33,10 +33,11 @@ export interface Problem {
   status: Status;
   createdAt: Date;
   lastAttemptedAt?: Date;
-  notes?: string; 
+  notes?: string;
+  solution?: string; // Add solution field
 }
 
 export interface ActivityDay {
-  date: string; 
-  count: number; 
+  date: string; // YYYY-MM-DD format
+  count: number; // number of problems worked on that day
 }

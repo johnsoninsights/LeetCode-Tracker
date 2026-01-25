@@ -88,7 +88,7 @@ export default function CodeEditor({ problem, isOpen, onClose, onSaveSolution }:
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-7xl h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
@@ -111,9 +111,9 @@ export default function CodeEditor({ problem, isOpen, onClose, onSaveSolution }:
         </div>
 
         {/* Editor and Output */}
-        <div className="flex-1 grid md:grid-cols-2 gap-4 p-6 overflow-hidden">
+        <div className="flex-1 grid md:grid-cols-2 gap-6 p-6 overflow-hidden min-h-0">
           {/* Code Editor */}
-          <div className="flex flex-col">
+          <div className="flex flex-col min-h-0">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 JavaScript Editor
@@ -136,7 +136,7 @@ export default function CodeEditor({ problem, isOpen, onClose, onSaveSolution }:
                 )}
               </button>
             </div>
-            <div className="flex-1 border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <div className="flex-1 border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden min-h-0">
               <Editor
                 height="100%"
                 defaultLanguage="javascript"
@@ -146,23 +146,24 @@ export default function CodeEditor({ problem, isOpen, onClose, onSaveSolution }:
                 theme={theme === 'dark' ? 'vs-dark' : 'light'}
                 options={{
                   minimap: { enabled: false },
-                  fontSize: 14,
+                  fontSize: 15,
                   lineNumbers: 'on',
                   scrollBeyondLastLine: false,
                   automaticLayout: true,
                   tabSize: 2,
                   wordWrap: 'on',
+                  padding: { top: 16, bottom: 16 },
                 }}
               />
             </div>
           </div>
 
           {/* Console Output */}
-          <div className="flex flex-col">
+          <div className="flex flex-col min-h-0">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
               Console Output
             </h3>
-            <div className="flex-1 bg-gray-900 text-green-400 font-mono text-sm p-4 rounded-xl overflow-auto">
+            <div className="flex-1 bg-gray-900 text-green-400 font-mono text-sm p-4 rounded-xl overflow-auto min-h-0">
               {output.length === 0 ? (
                 <p className="text-gray-500">Run your code to see output here...</p>
               ) : (

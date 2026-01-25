@@ -10,9 +10,16 @@ import ThemeToggle from '@/components/ThemeToggle';
 import AuthForm from '@/components/AuthForm';
 import UserMenu from '@/components/UserMenu';
 import type { Problem, Status, Difficulty } from '@/types';
-import { addProblem as addProblemToFirebase, getProblems, updateProblemStatus as updateStatusInFirebase, updateProblemNotes as updateNotesInFirebase, deleteProblem as deleteProblemFromFirebase } from '@/lib/firebaseHelpers';
+import { 
+  addProblem as addProblemToFirebase, 
+  getProblems, 
+  updateProblemStatus as updateStatusInFirebase, 
+  updateProblemNotes as updateNotesInFirebase, 
+  updateProblemSolution as updateSolutionInFirebase,
+  deleteProblem as deleteProblemFromFirebase 
+} from '@/lib/firebaseHelpers';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setProblems, addProblem, updateProblemStatus, updateProblemNotes, removeProblem, setLoading } from '@/store/problemsSlice';
+import { setProblems, addProblem, updateProblemStatus, updateProblemNotes, updateProblemSolution, removeProblem, setLoading } from '@/store/problemsSlice';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 
@@ -73,6 +80,17 @@ export default function Home() {
     } catch (error) {
       console.error('Failed to update notes:', error);
       showToast('Failed to save notes. Please try again.', 'error');
+    }
+  };
+
+  const handleUpdateSolution = async (problemId: string, solution: string) => {
+    try {
+      await updateSolutionInFirebase(problemId, solution);
+      dispatch(updateProblemSolution({ id: problemId, solution }));
+      showToast('Solution saved! 💾', 'success');
+    } catch (error) {
+      console.error('Failed to update solution:', error);
+      showToast('Failed to save solution. Please try again.', 'error');
     }
   };
 
@@ -171,6 +189,7 @@ export default function Home() {
             problems={filteredProblems} 
             onUpdateStatus={handleUpdateStatus}
             onUpdateNotes={handleUpdateNotes}
+            onUpdateSolution={handleUpdateSolution}
             onDeleteProblem={handleDeleteProblem}
           />
         </div>

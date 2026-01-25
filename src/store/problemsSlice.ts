@@ -37,6 +37,12 @@ const problemsSlice = createSlice({
         problem.notes = action.payload.notes;
       }
     },
+    updateProblemSolution: (state, action: PayloadAction<{ id: string; solution: string }>) => {
+      const problem = state.problems.find(p => p.id === action.payload.id);
+      if (problem) {
+        problem.solution = action.payload.solution;
+      }
+    },
     removeProblem: (state, action: PayloadAction<string>) => {
       state.problems = state.problems.filter(p => p.id !== action.payload);
     },
@@ -55,6 +61,7 @@ export const {
   addProblem,
   updateProblemStatus,
   updateProblemNotes,
+  updateProblemSolution,
   removeProblem,
   setLoading,
   setError,

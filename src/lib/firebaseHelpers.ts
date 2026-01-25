@@ -27,6 +27,9 @@ export const addProblem = async (problem: Problem, userId: string) => {
     if (problem.notes) {
       problemData.notes = problem.notes;
     }
+    if (problem.solution) {
+      problemData.solution = problem.solution;
+    }
 
     const docRef = await addDoc(collection(db, PROBLEMS_COLLECTION), problemData);
     return docRef.id;
@@ -58,6 +61,7 @@ export const getProblems = async (userId: string): Promise<Problem[]> => {
         createdAt: new Date(data.createdAt),
         lastAttemptedAt: data.lastAttemptedAt ? new Date(data.lastAttemptedAt) : undefined,
         notes: data.notes,
+        solution: data.solution,
       });
     });
     
@@ -89,6 +93,18 @@ export const updateProblemNotes = async (problemId: string, notes: string) => {
     });
   } catch (error) {
     console.error('Error updating problem notes:', error);
+    throw error;
+  }
+};
+
+export const updateProblemSolution = async (problemId: string, solution: string) => {
+  try {
+    const problemRef = doc(db, PROBLEMS_COLLECTION, problemId);
+    await updateDoc(problemRef, {
+      solution,
+    });
+  } catch (error) {
+    console.error('Error updating problem solution:', error);
     throw error;
   }
 };

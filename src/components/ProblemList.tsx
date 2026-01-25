@@ -2,18 +2,21 @@
 
 import { useState } from 'react';
 import type { Problem, Status } from '@/types';
-import { Trash2, ExternalLink, Hash, FileText } from 'lucide-react';
+import { Trash2, ExternalLink, Hash, FileText, Code2 } from 'lucide-react';
 import NotesModal from './NotesModal';
+import CodeEditor from './CodeEditor';
 
 interface ProblemListProps {
   problems: Problem[];
   onUpdateStatus: (problemId: string, newStatus: Status) => void;
   onDeleteProblem: (problemId: string) => void;
   onUpdateNotes: (problemId: string, notes: string) => void;
+  onUpdateSolution: (problemId: string, solution: string) => void;
 }
 
-export default function ProblemList({ problems, onUpdateStatus, onDeleteProblem, onUpdateNotes }: ProblemListProps) {
-  const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
+export default function ProblemList({ problems, onUpdateStatus, onDeleteProblem, onUpdateNotes, onUpdateSolution }: ProblemListProps) {
+  const [selectedProblemForNotes, setSelectedProblemForNotes] = useState<Problem | null>(null);
+  const [selectedProblemForCode, setSelectedProblemForCode] = useState<Problem | null>(null);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -80,7 +83,15 @@ export default function ProblemList({ problems, onUpdateStatus, onDeleteProblem,
                   {problem.difficulty}
                 </span>
                 <button
-                  onClick={() => setSelectedProblem(problem)}
+                  onClick={() => setSelectedProblemForCode(problem)}
+                  className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-200 hover:scale-110 shadow-md"
+                  aria-label="Open code editor"
+                  title="Practice in Code Editor"
+                >
+                  <Code2 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setSelectedProblemForNotes(problem)}
                   className="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-all duration-200 hover:scale-110 shadow-md"
                   aria-label="View notes"
                   title={problem.notes ? 'View/Edit Notes' : 'Add Notes'}
@@ -126,6 +137,12 @@ export default function ProblemList({ problems, onUpdateStatus, onDeleteProblem,
               </div>
             )}
 
+            {problem.solution && (
+              <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <p className="text-xs text-green-600 dark:text-green-400 font-semibold mb-1">✓ Solution Saved</p>
+              </div>
+            )}
+
             {problem.url && (
               <a
                 href={problem.url}
@@ -141,12 +158,21 @@ export default function ProblemList({ problems, onUpdateStatus, onDeleteProblem,
         ))}
       </div>
 
-      {selectedProblem && (
+      {selectedProblemForNotes && (
         <NotesModal
-          problem={selectedProblem}
-          isOpen={!!selectedProblem}
-          onClose={() => setSelectedProblem(null)}
+          problem={selectedProblemForNotes}
+          isOpen={!!selectedProblemForNotes}
+          onClose={() => setSelectedProblemForNotes(null)}
           onSave={onUpdateNotes}
+        />
+      )}
+
+      {selectedProblemForCode && (
+        <CodeEditor
+          problem={selectedProblemForCode}
+          isOpen={!!selectedProblemForCode}
+          onClose={() => setSelectedProblemForCode(null)}
+          onSaveSolution={onUpdateSolution}
         />
       )}
     </>
