@@ -6,22 +6,28 @@ import ProblemList from '@/components/ProblemList';
 import ProblemFilters from '@/components/ProblemFilters';
 import StatsDisplay from '@/components/StatsDisplay';
 import ThemeToggle from '@/components/ThemeToggle';
+import AuthForm from '@/components/AuthForm';
+import UserMenu from '@/components/UserMenu';
 import type { Problem, Status, Difficulty } from '@/types';
 import { addProblem as addProblemToFirebase, getProblems, updateProblemStatus as updateStatusInFirebase, deleteProblem as deleteProblemFromFirebase } from '@/lib/firebaseHelpers';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setProblems, addProblem, updateProblemStatus, removeProblem, setLoading } from '@/store/problemsSlice';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
+  const { user, loading: authLoading } = useAuth();
   const dispatch = useAppDispatch();
   const { problems, loading } = useAppSelector((state) => state.problems);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | 'All'>('All');
   const [selectedStatus, setSelectedStatus] = useState<Status | 'All'>('All');
 
   useEffect(() => {
+    if (!user) return;
+    
     const fetchProblems = async () => {
       dispatch(setLoading(true));
       try {
-        const fetchedProblems = await getProblems();
+        const fetchedProblems = await getProblems(user.uid); // Pass userId
         dispatch(setProblems(fetchedProblems));
       } catch (error) {
         console.error('Failed to fetch problems:', error);
@@ -29,11 +35,13 @@ export default function Home() {
     };
 
     fetchProblems();
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   const handleAddProblem = async (newProblem: Problem) => {
+    if (!user) return;
+    
     try {
-      const docId = await addProblemToFirebase(newProblem);
+      const docId = await addProblemToFirebase(newProblem, user.uid); // Pass userId
       dispatch(addProblem({ ...newProblem, id: docId }));
     } catch (error) {
       console.error('Failed to add problem:', error);
@@ -67,7 +75,7 @@ export default function Home() {
     return matchesDifficulty && matchesStatus;
   });
 
-  if (loading) {
+  if (authLoading) {
     return (
       <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
         <ThemeToggle />
@@ -78,9 +86,31 @@ export default function Home() {
     );
   }
 
+  if (!user) {
+    return (
+      <>
+        <ThemeToggle />
+        <AuthForm />
+      </>
+    );
+  }
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+        <ThemeToggle />
+        <UserMenu />
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-xl font-bold text-gray-900 dark:text-gray-100">Loading...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
       <ThemeToggle />
+      <UserMenu />
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
           LeetCode Progress Tracker

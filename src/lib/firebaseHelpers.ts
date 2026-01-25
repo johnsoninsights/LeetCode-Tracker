@@ -1,14 +1,14 @@
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Problem, Status } from '@/types';
 
 const PROBLEMS_COLLECTION = 'problems';
 
-
-export const addProblem = async (problem: Problem) => {
+// Add a new problem to Firestore (with userId)
+export const addProblem = async (problem: Problem, userId: string) => {
   try {
- 
     const problemData: any = {
+      userId, // Add userId to associate with the user
       title: problem.title,
       difficulty: problem.difficulty,
       tags: problem.tags,
@@ -16,7 +16,6 @@ export const addProblem = async (problem: Problem) => {
       createdAt: problem.createdAt.toISOString(),
     };
 
- 
     if (problem.leetcodeNumber) {
       problemData.leetcodeNumber = problem.leetcodeNumber;
     }
@@ -35,10 +34,14 @@ export const addProblem = async (problem: Problem) => {
   }
 };
 
-
-export const getProblems = async (): Promise<Problem[]> => {
+// Get all problems for a specific user
+export const getProblems = async (userId: string): Promise<Problem[]> => {
   try {
-    const querySnapshot = await getDocs(collection(db, PROBLEMS_COLLECTION));
+    const q = query(
+      collection(db, PROBLEMS_COLLECTION),
+      where('userId', '==', userId)
+    );
+    const querySnapshot = await getDocs(q);
     const problems: Problem[] = [];
     
     querySnapshot.forEach((doc) => {
@@ -63,7 +66,7 @@ export const getProblems = async (): Promise<Problem[]> => {
   }
 };
 
-
+// Update problem status
 export const updateProblemStatus = async (problemId: string, newStatus: Status) => {
   try {
     const problemRef = doc(db, PROBLEMS_COLLECTION, problemId);
@@ -77,7 +80,7 @@ export const updateProblemStatus = async (problemId: string, newStatus: Status) 
   }
 };
 
-
+// Delete a problem
 export const deleteProblem = async (problemId: string) => {
   try {
     await deleteDoc(doc(db, PROBLEMS_COLLECTION, problemId));

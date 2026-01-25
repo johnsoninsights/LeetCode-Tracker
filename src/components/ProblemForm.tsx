@@ -52,7 +52,7 @@ export default function ProblemForm({ onAddProblem }: ProblemFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md max-w-2xl">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Add New Problem</h2>
 
       <div className="mb-4">
