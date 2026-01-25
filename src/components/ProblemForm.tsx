@@ -28,16 +28,16 @@ export default function ProblemForm({ onAddProblem }: ProblemFormProps) {
       createdAt: new Date(),
     };
 
-    onAddProblem(newProblem); // Call the function passed from parent
+    onAddProblem(newProblem); 
     
-    // Clear form
+    
     setTitle('');
     setLeetcodeNumber('');
     setUrl('');
     setSelectedTags([]);
   };
 
-  // ... rest of your component stays the same
+  
   const allTags: AlgorithmTag[] = [
     'Arrays', 'Strings', 'Two Pointers', 'Sliding Window',
     'Hash Maps', 'Linked Lists', 'Trees', 'Graphs',
