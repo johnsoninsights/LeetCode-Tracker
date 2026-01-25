@@ -1,14 +1,13 @@
 'use client';
 
 import type { Problem } from '@/types';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface StatsDisplayProps {
   problems: Problem[];
 }
 
 export default function StatsDisplay({ problems }: StatsDisplayProps) {
-  // Calculate stats
   const totalProblems = problems.length;
   
   const statusCounts = {
@@ -29,7 +28,6 @@ export default function StatsDisplay({ problems }: StatsDisplayProps) {
     difficultyCounts[problem.difficulty]++;
   });
 
-  // Prepare data for status chart
   const statusData = [
     { name: 'Not Attempted', value: statusCounts['Not Attempted'], color: '#9CA3AF' },
     { name: 'Attempted', value: statusCounts['Attempted'], color: '#60A5FA' },
@@ -37,7 +35,6 @@ export default function StatsDisplay({ problems }: StatsDisplayProps) {
     { name: 'Solved Independently', value: statusCounts['Solved Independently'], color: '#34D399' },
   ].filter(item => item.value > 0);
 
-  // Prepare data for difficulty chart
   const difficultyData = [
     { name: 'Easy', value: difficultyCounts['Easy'], color: '#34D399' },
     { name: 'Medium', value: difficultyCounts['Medium'], color: '#FBBF24' },
@@ -49,42 +46,39 @@ export default function StatsDisplay({ problems }: StatsDisplayProps) {
 
   if (totalProblems === 0) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6 border-2 border-gray-200">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900">Your Progress</h2>
-        <p className="text-gray-700 text-lg">Add some problems to see your stats!</p>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6 border-2 border-gray-200 dark:border-gray-700">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Progress</h2>
+        <p className="text-gray-700 dark:text-gray-300 text-lg">Add some problems to see your stats!</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6 border-2 border-gray-200">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900">Your Progress</h2>
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6 border-2 border-gray-200 dark:border-gray-700">
+      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Your Progress</h2>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
-          <p className="text-sm font-semibold text-gray-900">Total Problems</p>
-          <p className="text-2xl font-bold text-blue-700">{totalProblems}</p>
+        <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg border-2 border-blue-200 dark:border-blue-700">
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Total Problems</p>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{totalProblems}</p>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg border-2 border-green-200">
-          <p className="text-sm font-semibold text-gray-900">Solved</p>
-          <p className="text-2xl font-bold text-green-700">{solvedCount}</p>
+        <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg border-2 border-green-200 dark:border-green-700">
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Solved</p>
+          <p className="text-2xl font-bold text-green-700 dark:text-green-300">{solvedCount}</p>
         </div>
-        <div className="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
-          <p className="text-sm font-semibold text-gray-900">Success Rate</p>
-          <p className="text-2xl font-bold text-purple-700">{solvedPercentage}%</p>
+        <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg border-2 border-purple-200 dark:border-purple-700">
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Success Rate</p>
+          <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{solvedPercentage}%</p>
         </div>
-        <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200">
-          <p className="text-sm font-semibold text-gray-900">In Progress</p>
-          <p className="text-2xl font-bold text-yellow-700">{statusCounts['Attempted']}</p>
+        <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg border-2 border-yellow-200 dark:border-yellow-700">
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">In Progress</p>
+          <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{statusCounts['Attempted']}</p>
         </div>
       </div>
 
-      {/* Charts */}
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Status Breakdown */}
         <div>
-          <h3 className="text-lg font-bold mb-3 text-center text-gray-900">Status Breakdown</h3>
+          <h3 className="text-lg font-bold mb-3 text-center text-gray-900 dark:text-gray-100">Status Breakdown</h3>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -106,9 +100,8 @@ export default function StatsDisplay({ problems }: StatsDisplayProps) {
           </ResponsiveContainer>
         </div>
 
-        {/* Difficulty Breakdown */}
         <div>
-          <h3 className="text-lg font-bold mb-3 text-center text-gray-900">Difficulty Breakdown</h3>
+          <h3 className="text-lg font-bold mb-3 text-center text-gray-900 dark:text-gray-100">Difficulty Breakdown</h3>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie

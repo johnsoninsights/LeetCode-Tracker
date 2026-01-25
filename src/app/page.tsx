@@ -5,6 +5,7 @@ import ProblemForm from '@/components/ProblemForm';
 import ProblemList from '@/components/ProblemList';
 import ProblemFilters from '@/components/ProblemFilters';
 import StatsDisplay from '@/components/StatsDisplay';
+import ThemeToggle from '@/components/ThemeToggle';
 import type { Problem, Status, Difficulty } from '@/types';
 import { addProblem as addProblemToFirebase, getProblems, updateProblemStatus as updateStatusInFirebase, deleteProblem as deleteProblemFromFirebase } from '@/lib/firebaseHelpers';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -68,18 +69,20 @@ export default function Home() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 py-8 px-4">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+        <ThemeToggle />
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-xl font-bold text-gray-900">Loading...</p>
+          <p className="text-xl font-bold text-gray-900 dark:text-gray-100">Loading...</p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+      <ThemeToggle />
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
           LeetCode Progress Tracker
         </h1>
 

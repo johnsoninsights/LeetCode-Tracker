@@ -52,27 +52,27 @@ export default function ProblemForm({ onAddProblem }: ProblemFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md max-w-2xl">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900">Add New Problem</h2>
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md max-w-2xl">
+      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Add New Problem</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-semibold mb-2 text-gray-900">Problem Title</label>
+        <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">Problem Title</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full p-2 border-2 border-gray-300 rounded text-gray-900 focus:border-blue-500 focus:outline-none"
+          className="w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none"
           placeholder="e.g., Two Sum"
         />
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-semibold mb-2 text-gray-900">Difficulty</label>
+        <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">Difficulty</label>
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-          className="w-full p-2 border-2 border-gray-300 rounded text-gray-900 focus:border-blue-500 focus:outline-none"
+          className="w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none"
         >
           <option value="Easy">Easy</option>
           <option value="Medium">Medium</option>
@@ -81,29 +81,29 @@ export default function ProblemForm({ onAddProblem }: ProblemFormProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-semibold mb-2 text-gray-900">LeetCode Number (optional)</label>
+        <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">LeetCode Number (optional)</label>
         <input
           type="number"
           value={leetcodeNumber}
           onChange={(e) => setLeetcodeNumber(e.target.value)}
-          className="w-full p-2 border-2 border-gray-300 rounded text-gray-900 focus:border-blue-500 focus:outline-none"
+          className="w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none"
           placeholder="e.g., 1"
         />
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-semibold mb-2 text-gray-900">Problem URL (optional)</label>
+        <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">Problem URL (optional)</label>
         <input
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="w-full p-2 border-2 border-gray-300 rounded text-gray-900 focus:border-blue-500 focus:outline-none"
+          className="w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none"
           placeholder="https://leetcode.com/problems/..."
         />
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-semibold mb-2 text-gray-900">Algorithm Tags</label>
+        <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-gray-100">Algorithm Tags</label>
         <div className="flex flex-wrap gap-2">
           {allTags.map(tag => (
             <button
@@ -112,8 +112,8 @@ export default function ProblemForm({ onAddProblem }: ProblemFormProps) {
               onClick={() => toggleTag(tag)}
               className={`px-3 py-1 rounded text-sm font-medium ${
                 selectedTags.includes(tag)
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-300 text-gray-900 hover:bg-gray-400'
+                  ? 'bg-blue-600 text-white dark:bg-blue-500'
+                  : 'bg-gray-300 text-gray-900 hover:bg-gray-400 dark:bg-gray-600 dark:text-gray-100 dark:hover:bg-gray-500'
               }`}
             >
               {tag}
@@ -124,7 +124,7 @@ export default function ProblemForm({ onAddProblem }: ProblemFormProps) {
 
       <button
         type="submit"
-        className="w-full bg-green-600 text-white py-2 rounded font-semibold hover:bg-green-700"
+        className="w-full bg-green-600 text-white py-2 rounded font-semibold hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
       >
         Add Problem
       </button>
