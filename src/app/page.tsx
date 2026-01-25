@@ -1,37 +1,39 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ProblemForm from '@/components/ProblemForm';
 import ProblemList from '@/components/ProblemList';
 import ProblemFilters from '@/components/ProblemFilters';
+import StatsDisplay from '@/components/StatsDisplay';
 import type { Problem, Status, Difficulty } from '@/types';
-import { addProblem, getProblems, updateProblemStatus, deleteProblem } from '@/lib/firebaseHelpers';
+import { addProblem as addProblemToFirebase, getProblems, updateProblemStatus as updateStatusInFirebase, deleteProblem as deleteProblemFromFirebase } from '@/lib/firebaseHelpers';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setProblems, addProblem, updateProblemStatus, removeProblem, setLoading } from '@/store/problemsSlice';
 
 export default function Home() {
-  const [problems, setProblems] = useState<Problem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { problems, loading } = useAppSelector((state) => state.problems);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | 'All'>('All');
   const [selectedStatus, setSelectedStatus] = useState<Status | 'All'>('All');
 
   useEffect(() => {
     const fetchProblems = async () => {
+      dispatch(setLoading(true));
       try {
         const fetchedProblems = await getProblems();
-        setProblems(fetchedProblems);
+        dispatch(setProblems(fetchedProblems));
       } catch (error) {
         console.error('Failed to fetch problems:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchProblems();
-  }, []);
+  }, [dispatch]);
 
   const handleAddProblem = async (newProblem: Problem) => {
     try {
-      const docId = await addProblem(newProblem);
-      setProblems([...problems, { ...newProblem, id: docId }]);
+      const docId = await addProblemToFirebase(newProblem);
+      dispatch(addProblem({ ...newProblem, id: docId }));
     } catch (error) {
       console.error('Failed to add problem:', error);
       alert('Failed to add problem. Please try again.');
@@ -40,12 +42,8 @@ export default function Home() {
 
   const handleUpdateStatus = async (problemId: string, newStatus: Status) => {
     try {
-      await updateProblemStatus(problemId, newStatus);
-      setProblems(problems.map(problem => 
-        problem.id === problemId 
-          ? { ...problem, status: newStatus, lastAttemptedAt: new Date() }
-          : problem
-      ));
+      await updateStatusInFirebase(problemId, newStatus);
+      dispatch(updateProblemStatus({ id: problemId, status: newStatus }));
     } catch (error) {
       console.error('Failed to update status:', error);
       alert('Failed to update status. Please try again.');
@@ -54,15 +52,14 @@ export default function Home() {
 
   const handleDeleteProblem = async (problemId: string) => {
     try {
-      await deleteProblem(problemId);
-      setProblems(problems.filter(problem => problem.id !== problemId));
+      await deleteProblemFromFirebase(problemId);
+      dispatch(removeProblem(problemId));
     } catch (error) {
       console.error('Failed to delete problem:', error);
       alert('Failed to delete problem. Please try again.');
     }
   };
 
-  // Filter problems based on selected filters
   const filteredProblems = problems.filter(problem => {
     const matchesDifficulty = selectedDifficulty === 'All' || problem.difficulty === selectedDifficulty;
     const matchesStatus = selectedStatus === 'All' || problem.status === selectedStatus;
@@ -73,7 +70,7 @@ export default function Home() {
     return (
       <main className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-xl">Loading...</p>
+          <p className="text-xl font-bold text-gray-900">Loading...</p>
         </div>
       </main>
     );
@@ -82,9 +79,11 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8">
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">
           LeetCode Progress Tracker
         </h1>
+
+        <StatsDisplay problems={problems} />
 
         <div className="mb-8">
           <ProblemForm onAddProblem={handleAddProblem} />

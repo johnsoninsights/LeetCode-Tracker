@@ -25,16 +25,16 @@ export default function ProblemFilters({
   ];
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-      <h3 className="text-lg font-semibold mb-3">Filter Problems</h3>
+    <div className="bg-white p-4 rounded-lg shadow-md mb-6 border-2 border-gray-200">
+      <h3 className="text-lg font-bold mb-3 text-gray-900">Filter Problems</h3>
       
       <div className="flex gap-4 flex-wrap">
         <div>
-          <label className="block text-sm font-medium mb-2">Difficulty</label>
+          <label className="block text-sm font-semibold mb-2 text-gray-900">Difficulty</label>
           <select
             value={selectedDifficulty}
             onChange={(e) => onDifficultyChange(e.target.value as Difficulty | 'All')}
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 border-2 border-gray-300 rounded text-gray-900 font-medium focus:border-blue-500 focus:outline-none"
           >
             {difficulties.map(difficulty => (
               <option key={difficulty} value={difficulty}>
@@ -45,11 +45,11 @@ export default function ProblemFilters({
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Status</label>
+          <label className="block text-sm font-semibold mb-2 text-gray-900">Status</label>
           <select
             value={selectedStatus}
             onChange={(e) => onStatusChange(e.target.value as Status | 'All')}
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 border-2 border-gray-300 rounded text-gray-900 font-medium focus:border-blue-500 focus:outline-none"
           >
             {statuses.map(status => (
               <option key={status} value={status}>
