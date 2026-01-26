@@ -2,10 +2,46 @@
 
 A modern, full-featured web application for tracking your LeetCode problem-solving journey. Built with cutting-edge technologies and designed for developers who want to master algorithms systematically.
 
-![LeetCode Progress Tracker](https://img.shields.io/badge/Status-Production-success)
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+## 📸 Preview
+
+<div align="center">
+  <img src="./screenshots/dashboard.png" alt="Dashboard" width="100%">
+  <p><i>Track your progress with visual statistics and interactive charts</i></p>
+</div>
+
+<div align="center">
+  <img src="./screenshots/code-editor.png" alt="Code Editor" width="100%">
+  <p><i>Practice solutions with integrated Monaco Editor and real-time console output</i></p>
+</div>
+
+<div align="center">
+  <img src="./screenshots/activity-tracker.png" alt="Activity Tracker" width="100%">
+  <p><i>GitHub-style contribution graph showing your coding consistency and streaks</i></p>
+</div>
+
+<details>
+<summary>📱 See More Screenshots</summary>
+
+<div align="center">
+  <img src="./screenshots/problem-list.png" alt="Problem List" width="100%">
+  <p><i>Organized problem list with tags, status indicators, and quick actions</i></p>
+</div>
+
+<div align="center">
+  <img src="./screenshots/dark-mode.png" alt="Dark Mode" width="100%">
+  <p><i>Seamless dark mode for comfortable late-night coding sessions</i></p>
+</div>
+
+</details>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Production-success" alt="Status">
+  <img src="https://img.shields.io/badge/Next.js-15-black" alt="Next.js">
+  <img src="https://img.shields.io/badge/TypeScript-5.0-blue" alt="TypeScript">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+</p>
+
+---
 
 ## ✨ Features
 
@@ -56,6 +92,8 @@ A modern, full-featured web application for tracking your LeetCode problem-solvi
 - Color-coded difficulty badges
 - Status indicators with visual feedback
 
+---
+
 ## 🛠️ Tech Stack
 
 ### **Frontend**
@@ -80,6 +118,8 @@ A modern, full-featured web application for tracking your LeetCode problem-solvi
 - **ESLint** - Code linting
 - **PostCSS** - CSS processing
 - **Git** - Version control
+
+---
 
 ## 📦 Installation
 
@@ -127,6 +167,8 @@ npm run dev
 6. **Open your browser**
 Navigate to [http://localhost:3000](http://localhost:3000)
 
+---
+
 ## 🚀 Deployment
 
 This app is optimized for deployment on **Vercel** (recommended) or any platform supporting Next.js:
@@ -145,6 +187,8 @@ This app is optimized for deployment on **Vercel** (recommended) or any platform
 - **AWS Amplify**: Use Next.js build settings
 - **Docker**: Dockerfile included (optional)
 
+---
+
 ## 📱 Usage
 
 ### Getting Started
@@ -161,6 +205,8 @@ This app is optimized for deployment on **Vercel** (recommended) or any platform
 - Tag problems properly for easy filtering
 - Maintain your streak for motivation!
 
+---
+
 ## 🎯 Features Roadmap
 
 ### Upcoming Features
@@ -174,6 +220,8 @@ This app is optimized for deployment on **Vercel** (recommended) or any platform
 - [ ] Team/Group tracking features
 - [ ] Mobile app (React Native)
 
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -184,9 +232,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## 👨‍💻 Author
 
@@ -195,30 +247,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - GitHub: [@yourusername](https://github.com/yourusername)
 - LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
 
+---
+
 ## 🙏 Acknowledgments
 
 - Inspired by LeetCode's problem tracking needs
 - UI/UX design influenced by modern developer tools
 - Icons from [Lucide](https://lucide.dev/)
 - Color palette inspired by Tailwind's design system
-
-## 📸 Screenshots
-
-### Dashboard
-![Dashboard](./screenshots/dashboard.png)
-*Track your progress with visual statistics and charts*
-
-### Activity Tracker
-![Activity Tracker](./screenshots/activity.png)
-*GitHub-style contribution graph showing your consistency*
-
-### Code Editor
-![Code Editor](./screenshots/editor.png)
-*Practice solutions with integrated Monaco Editor*
-
-### Dark Mode
-![Dark Mode](./screenshots/dark-mode.png)
-*Seamless dark mode for late-night coding sessions*
 
 ---
 
@@ -227,32 +263,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 </div>
 
 <div align="center">
-  <sub>Star ⭐ this repo if you find it helpful!</sub>
+  <sub>⭐ Star this repo if you find it helpful!</sub>
 </div>
-```
-
-## Additional Files to Add:
-
-Create a `LICENSE` file:
-```
-MIT License
-
-Copyright (c) 2025 Your Name
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
