@@ -243,9 +243,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Your Name**
-- Portfolio: [yourwebsite.com](https://yourwebsite.com)
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
+- Portfolio: evanjohnson.dev
+- GitHub: https://github.com/johnsoninsights
+- LinkedIn: Evan Johnson www.linkedin.com/in/evan-johnson-dev<img width="468" height="23" alt="image" src="https://github.com/user-attachments/assets/397adad0-37aa-4c38-aa7a-c09a17bcc5e5" />
+
+
 
 ---
 
