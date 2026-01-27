@@ -8,7 +8,6 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Ignore these paths because we're storing Date objects
         ignoredActions: ['problems/setProblems', 'problems/addProblem', 'problems/updateProblemStatus'],
         ignoredPaths: ['problems.problems'],
       },
