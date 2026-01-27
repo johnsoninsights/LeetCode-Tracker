@@ -154,7 +154,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-8 animate-fade-in">
           <div className="text-center flex-1">
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-2 pb-1">
-              LeetCode Progress Tracker
+              Algorithm Progress Tracker
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm md:text-lg">Master algorithms, track your journey</p>
           </div>
