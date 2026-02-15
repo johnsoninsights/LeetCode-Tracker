@@ -22,9 +22,10 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setProblems, addProblem, updateProblemStatus, updateProblemNotes, updateProblemSolution, removeProblem, setLoading } from '@/store/problemsSlice';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
+import { DEMO_PROBLEMS } from '@/lib/demoData';
 
 export default function Home() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, isDemo } = useAuth();
   const { showToast } = useToast();
   const dispatch = useAppDispatch();
   const { problems, loading } = useAppSelector((state) => state.problems);
@@ -33,12 +34,21 @@ export default function Home() {
 
   useEffect(() => {
     if (!user) return;
-    
+
     const fetchProblems = async () => {
       dispatch(setLoading(true));
       try {
-        const fetchedProblems = await getProblems(user.uid);
-        dispatch(setProblems(fetchedProblems));
+        if (isDemo) {
+          // Load demo data directly into Redux without Firebase
+          const demoProblems = DEMO_PROBLEMS.map((p, index) => ({
+            ...p,
+            id: `demo-${index}`,
+          }));
+          dispatch(setProblems(demoProblems));
+        } else {
+          const fetchedProblems = await getProblems(user.uid);
+          dispatch(setProblems(fetchedProblems));
+        }
       } catch (error) {
         console.error('Failed to fetch problems:', error);
         showToast('Failed to load problems', 'error');
@@ -46,11 +56,18 @@ export default function Home() {
     };
 
     fetchProblems();
-  }, [dispatch, user, showToast]);
+  }, [dispatch, user, isDemo, showToast]);
 
   const handleAddProblem = async (newProblem: Problem) => {
     if (!user) return;
-    
+
+    if (isDemo) {
+      // In demo mode just update local state
+      dispatch(addProblem({ ...newProblem, id: `demo-${Date.now()}` }));
+      showToast('Problem added! (Demo mode - changes not saved) 🎉', 'info');
+      return;
+    }
+
     try {
       const docId = await addProblemToFirebase(newProblem, user.uid);
       dispatch(addProblem({ ...newProblem, id: docId }));
@@ -62,6 +79,12 @@ export default function Home() {
   };
 
   const handleUpdateStatus = async (problemId: string, newStatus: Status) => {
+    if (isDemo) {
+      dispatch(updateProblemStatus({ id: problemId, status: newStatus }));
+      showToast('Status updated! (Demo mode) ✓', 'info');
+      return;
+    }
+
     try {
       await updateStatusInFirebase(problemId, newStatus);
       dispatch(updateProblemStatus({ id: problemId, status: newStatus }));
@@ -73,6 +96,12 @@ export default function Home() {
   };
 
   const handleUpdateNotes = async (problemId: string, notes: string) => {
+    if (isDemo) {
+      dispatch(updateProblemNotes({ id: problemId, notes }));
+      showToast('Notes saved! (Demo mode) 📝', 'info');
+      return;
+    }
+
     try {
       await updateNotesInFirebase(problemId, notes);
       dispatch(updateProblemNotes({ id: problemId, notes }));
@@ -84,6 +113,12 @@ export default function Home() {
   };
 
   const handleUpdateSolution = async (problemId: string, solution: string) => {
+    if (isDemo) {
+      dispatch(updateProblemSolution({ id: problemId, solution }));
+      showToast('Solution saved! (Demo mode) 💾', 'info');
+      return;
+    }
+
     try {
       await updateSolutionInFirebase(problemId, solution);
       dispatch(updateProblemSolution({ id: problemId, solution }));
@@ -95,6 +130,12 @@ export default function Home() {
   };
 
   const handleDeleteProblem = async (problemId: string) => {
+    if (isDemo) {
+      dispatch(removeProblem(problemId));
+      showToast('Problem deleted (Demo mode)', 'info');
+      return;
+    }
+
     try {
       await deleteProblemFromFirebase(problemId);
       dispatch(removeProblem(problemId));
@@ -154,7 +195,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-8 animate-fade-in">
           <div className="text-center flex-1">
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-2 pb-1">
-              Algorithm Progress Tracker
+              LeetCode Progress Tracker
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm md:text-lg">Master algorithms, track your journey</p>
           </div>
@@ -162,6 +203,27 @@ export default function Home() {
             <UserMenu />
           </div>
         </div>
+
+        {/* Demo Mode Banner */}
+        {isDemo && (
+          <div className="mb-6 p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-xl flex items-center justify-between animate-fade-in">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">👀</span>
+              <div>
+                <p className="font-semibold text-yellow-700 dark:text-yellow-400">Demo Mode</p>
+                <p className="text-sm text-yellow-600 dark:text-yellow-500">
+                  You're exploring a demo — changes won't be saved. Sign up to track your real progress!
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => showToast('Sign out and create an account to save your progress!', 'info')}
+              className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-semibold text-sm hover:from-yellow-600 hover:to-orange-600 transition-all whitespace-nowrap ml-4"
+            >
+              Sign Up Free
+            </button>
+          </div>
+        )}
 
         <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
           <StatsDisplay problems={problems} />
@@ -185,8 +247,8 @@ export default function Home() {
         </div>
 
         <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <ProblemList 
-            problems={filteredProblems} 
+          <ProblemList
+            problems={filteredProblems}
             onUpdateStatus={handleUpdateStatus}
             onUpdateNotes={handleUpdateNotes}
             onUpdateSolution={handleUpdateSolution}
