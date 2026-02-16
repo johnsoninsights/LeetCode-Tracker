@@ -5,7 +5,7 @@ A modern, full-featured web application for tracking your LeetCode problem-solvi
 ## 📸 Preview
 
 <div align="center">
-  <img src="./screenshots/dashboard.png" alt="Dashboard" width="100%">
+  <img src="./screenshots/home.png" alt="Dashboard" width="100%">
   <p><i>Track your progress with visual statistics and interactive charts</i></p>
 </div>
 
