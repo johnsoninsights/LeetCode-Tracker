@@ -144,31 +144,94 @@ export default function ActivityTracker({ problems }: ActivityTrackerProps) {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-orange-500 to-red-500 p-4 md:p-6 rounded-xl shadow-lg">
-          <div className="flex items-center gap-3 mb-2">
-            <Flame className="w-5 h-5 md:w-6 md:h-6 text-white" />
-            <p className="text-xs md:text-sm text-white/80 font-medium">Current Streak</p>
+        {/* Current Streak Card */}
+        <div className="bg-gradient-to-br from-orange-500 to-red-500 p-4 md:p-6 rounded-xl shadow-lg overflow-hidden relative">
+          <div className="flex items-start justify-between">
+            <div className="z-10 relative">
+              <div className="flex items-center gap-3 mb-2">
+                <Flame className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <p className="text-xs md:text-sm text-white/80 font-medium">Current Streak</p>
+              </div>
+              <p className="text-3xl md:text-4xl font-bold text-white">{currentStreak}</p>
+              <p className="text-xs md:text-sm text-white/80 mt-1">days in a row</p>
+            </div>
+            {/* Decorative Right Side - streak bars */}
+            <div className="flex flex-col items-end gap-1">
+              {[...Array(7)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-4 rounded-full transition-all ${
+                    i < currentStreak % 7 || currentStreak >= 7
+                      ? 'bg-white/60 w-8'
+                      : 'bg-white/20 w-4'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-          <p className="text-3xl md:text-4xl font-bold text-white">{currentStreak}</p>
-          <p className="text-xs md:text-sm text-white/80 mt-1">days in a row</p>
+          {/* Background decorative flame */}
+          <div className="absolute -bottom-4 -right-4 text-white/10 text-9xl pointer-events-none select-none">
+            🔥
+          </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-4 md:p-6 rounded-xl shadow-lg">
-          <div className="flex items-center gap-3 mb-2">
-            <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-white" />
-            <p className="text-xs md:text-sm text-white/80 font-medium">Longest Streak</p>
+        {/* Longest Streak Card */}
+        <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-4 md:p-6 rounded-xl shadow-lg overflow-hidden relative">
+          <div className="flex items-start justify-between">
+            <div className="z-10 relative">
+              <div className="flex items-center gap-3 mb-2">
+                <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <p className="text-xs md:text-sm text-white/80 font-medium">Longest Streak</p>
+              </div>
+              <p className="text-3xl md:text-4xl font-bold text-white">{longestStreak}</p>
+              <p className="text-xs md:text-sm text-white/80 mt-1">personal best</p>
+            </div>
+            {/* Decorative bar chart */}
+            <div className="flex items-end gap-1 h-16">
+              {[30, 55, 40, 70, 50, 85, 65].map((height, i) => (
+                <div
+                  key={i}
+                  className="w-3 rounded-t-sm bg-white/30 hover:bg-white/50 transition-all"
+                  style={{ height: `${height}%` }}
+                />
+              ))}
+            </div>
           </div>
-          <p className="text-3xl md:text-4xl font-bold text-white">{longestStreak}</p>
-          <p className="text-xs md:text-sm text-white/80 mt-1">days total</p>
+          {/* Background decorative */}
+          <div className="absolute -bottom-4 -right-4 text-white/10 text-9xl pointer-events-none select-none">
+            ⚡
+          </div>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500 to-indigo-500 p-4 md:p-6 rounded-xl shadow-lg">
-          <div className="flex items-center gap-3 mb-2">
-            <Calendar className="w-5 h-5 md:w-6 md:h-6 text-white" />
-            <p className="text-xs md:text-sm text-white/80 font-medium">Active Days</p>
+        {/* Active Days Card */}
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-500 p-4 md:p-6 rounded-xl shadow-lg overflow-hidden relative">
+          <div className="flex items-start justify-between">
+            <div className="z-10 relative">
+              <div className="flex items-center gap-3 mb-2">
+                <Calendar className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <p className="text-xs md:text-sm text-white/80 font-medium">Active Days</p>
+              </div>
+              <p className="text-3xl md:text-4xl font-bold text-white">{totalActiveDays}</p>
+              <p className="text-xs md:text-sm text-white/80 mt-1">days practiced</p>
+            </div>
+            {/* Decorative mini calendar dots */}
+            <div className="grid grid-cols-4 gap-1">
+              {[...Array(16)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-3 h-3 rounded-sm ${
+                    i < totalActiveDays % 16
+                      ? 'bg-white/70'
+                      : 'bg-white/20'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-          <p className="text-3xl md:text-4xl font-bold text-white">{totalActiveDays}</p>
-          <p className="text-xs md:text-sm text-white/80 mt-1">days practiced</p>
+          {/* Background decorative */}
+          <div className="absolute -bottom-4 -right-4 text-white/10 text-9xl pointer-events-none select-none">
+            📅
+          </div>
         </div>
       </div>
 
@@ -273,60 +336,106 @@ export default function ActivityTracker({ problems }: ActivityTrackerProps) {
         {/* Additional Stats - Grid layout on mobile, single column on desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
           {/* Best Day */}
-          <div className="bg-gradient-to-br from-yellow-500 to-amber-500 p-4 md:p-5 rounded-xl shadow-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Star className="w-4 h-4 md:w-5 md:h-5 text-white" />
-              <p className="text-xs md:text-sm text-white/90 font-semibold">Best Day</p>
+          <div className="bg-gradient-to-br from-yellow-500 to-amber-500 p-4 md:p-5 rounded-xl shadow-lg overflow-hidden relative">
+            <div className="flex items-start justify-between">
+              <div className="z-10 relative">
+                <div className="flex items-center gap-2 mb-2">
+                  <Star className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                  <p className="text-xs md:text-sm text-white/90 font-semibold">Best Day</p>
+                </div>
+                {bestDay.date ? (
+                  <>
+                    <p className="text-2xl md:text-3xl font-bold text-white">{bestDay.count}</p>
+                    <p className="text-xs text-white/80 mt-1">
+                      {new Date(bestDay.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-xs md:text-sm text-white/80">No activity yet</p>
+                )}
+              </div>
+              <div className="text-4xl opacity-20 select-none">⭐</div>
             </div>
-            {bestDay.date ? (
-              <>
-                <p className="text-2xl md:text-3xl font-bold text-white">{bestDay.count}</p>
-                <p className="text-xs text-white/80 mt-1">
-                  {new Date(bestDay.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                </p>
-              </>
-            ) : (
-              <p className="text-xs md:text-sm text-white/80">No activity yet</p>
-            )}
+            <div className="absolute -bottom-4 -right-4 text-white/10 text-9xl pointer-events-none select-none">
+              🏆
+            </div>
           </div>
 
           {/* Motivational Message */}
-          <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 md:p-5 rounded-xl shadow-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Zap className="w-4 h-4 md:w-5 md:h-5 text-white" />
-              <p className="text-xs md:text-sm text-white/90 font-semibold">Keep Going!</p>
+          <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 md:p-5 rounded-xl shadow-lg overflow-hidden relative">
+            <div className="flex items-start justify-between">
+              <div className="z-10 relative">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                  <p className="text-xs md:text-sm text-white/90 font-semibold">Keep Going!</p>
+                </div>
+                <p className="text-xs md:text-sm text-white font-medium leading-relaxed">
+                  {getMotivationalMessage()}
+                </p>
+              </div>
+              <div className="text-4xl opacity-20 select-none">💪</div>
             </div>
-            <p className="text-xs md:text-sm text-white font-medium leading-relaxed">
-              {getMotivationalMessage()}
-            </p>
+            <div className="absolute -bottom-4 -right-4 text-white/10 text-9xl pointer-events-none select-none">
+              🚀
+            </div>
           </div>
 
           {/* This Week Progress */}
-          <div className="bg-white dark:bg-gray-800 p-4 md:p-5 rounded-xl border-2 border-gray-200 dark:border-gray-700 sm:col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-3">
-              <Calendar className="w-4 h-4 md:w-5 md:h-5 text-indigo-600 dark:text-indigo-400" />
-              <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 font-semibold">This Week</p>
+          <div className="bg-white dark:bg-gray-800 p-4 md:p-5 rounded-xl border-2 border-gray-200 dark:border-gray-700 sm:col-span-2 md:col-span-1 overflow-hidden relative">
+            <div className="flex items-start justify-between">
+              <div className="z-10 relative">
+                <div className="flex items-center gap-2 mb-3">
+                  <Calendar className="w-4 h-4 md:w-5 md:h-5 text-indigo-600 dark:text-indigo-400" />
+                  <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 font-semibold">This Week</p>
+                </div>
+                {(() => {
+                  const today = new Date();
+                  const startOfWeek = new Date(today);
+                  startOfWeek.setDate(today.getDate() - today.getDay());
+                  
+                  let weekCount = 0;
+                  for (let i = 0; i < 7; i++) {
+                    const day = new Date(startOfWeek);
+                    day.setDate(startOfWeek.getDate() + i);
+                    const dateStr = day.toISOString().split('T')[0];
+                    weekCount += activityData.get(dateStr) || 0;
+                  }
+                  
+                  return (
+                    <>
+                      <p className="text-2xl md:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{weekCount}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">problems attempted</p>
+                    </>
+                  );
+                })()}
+              </div>
+              {/* Decorative week day dots */}
+              <div className="flex flex-col gap-1 items-end">
+                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => {
+                  const today = new Date();
+                  const startOfWeek = new Date(today);
+                  startOfWeek.setDate(today.getDate() - today.getDay());
+                  const thisDay = new Date(startOfWeek);
+                  thisDay.setDate(startOfWeek.getDate() + i);
+                  const dateStr = thisDay.toISOString().split('T')[0];
+                  const hasActivity = (activityData.get(dateStr) || 0) > 0;
+                  const isPast = thisDay <= today;
+
+                  return (
+                    <div key={i} className="flex items-center gap-1">
+                      <span className="text-xs text-gray-400 dark:text-gray-500 w-3">{day}</span>
+                      <div className={`w-3 h-3 rounded-full ${
+                        hasActivity
+                          ? 'bg-indigo-500'
+                          : isPast
+                          ? 'bg-gray-200 dark:bg-gray-600'
+                          : 'bg-gray-100 dark:bg-gray-700'
+                      }`} />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            {(() => {
-              const today = new Date();
-              const startOfWeek = new Date(today);
-              startOfWeek.setDate(today.getDate() - today.getDay());
-              
-              let weekCount = 0;
-              for (let i = 0; i < 7; i++) {
-                const day = new Date(startOfWeek);
-                day.setDate(startOfWeek.getDate() + i);
-                const dateStr = day.toISOString().split('T')[0];
-                weekCount += activityData.get(dateStr) || 0;
-              }
-              
-              return (
-                <>
-                  <p className="text-2xl md:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{weekCount}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">problems attempted</p>
-                </>
-              );
-            })()}
           </div>
         </div>
       </div>
